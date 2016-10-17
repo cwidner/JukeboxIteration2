@@ -14,27 +14,14 @@ import javax.swing.event.ListDataListener;
 public class SongQueue implements ListModel {
 	
 	private ArrayList<Song> queue;
-	private static SongQueue list;
 	private int size;
 	
 	/*
 	 * The SongQueue constructor.
 	 */
-	private SongQueue() {
+	public SongQueue() {
 		queue = new ArrayList<>();
 		size = 0;
-	}
-	
-	/*
-	 * The getInstance method of the SongQueue class.
-	 * 
-	 * Returns: The instance of the SonQueue.
-	 */
-	public static SongQueue getInstance() {
-		if(list == null)
-			list = new SongQueue();
-		
-		return list;
 	}
 
 	/*

@@ -14,12 +14,20 @@ import javax.swing.table.TableModel;
 public class SongLibrary implements TableModel {
 	
 	private ArrayList<Song> songs;
+	private static SongLibrary library;
 	
 	/*
 	 * The SongCollection constructor.
 	 */
-	public SongLibrary() {
+	private SongLibrary() {
 		songs = new ArrayList<>();
+	}
+	
+	public static SongLibrary getInstance() {
+		if(library == null)
+			library = new SongLibrary();
+		
+		return library;
 	}
 	
 	/*
