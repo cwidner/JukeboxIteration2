@@ -70,8 +70,7 @@ public class SongQueue implements ListModel {
 	
 	@Override
 	public Object getElementAt(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		return queue.get(index);
 	}
 
 	@Override

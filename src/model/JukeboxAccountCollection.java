@@ -22,8 +22,17 @@ public class JukeboxAccountCollection  {
 	private JukeboxAccountCollection() {
 		accounts = new ArrayList<JukeboxAccount>();
 		size = 0;
+		populateCollection();
 	}
 	
+	private void populateCollection() {
+		this.add(new JukeboxAccount("Chris", "1"));
+		this.add(new JukeboxAccount("Devon", "22"));
+		this.add(new JukeboxAccount("River", "333"));
+		this.add(new JukeboxAccount("Ryan", "4444"));
+		
+	}
+
 	/*
 	 * The get instance method of the singleton class.
 	 * 
