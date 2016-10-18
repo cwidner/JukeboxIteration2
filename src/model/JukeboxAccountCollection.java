@@ -2,13 +2,15 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.table.TableModel;
+
 /**
  * This class stores all the JukeboxAccount objects into one collection.
  * 
  * @author Colin Widner and Qiming Wan
  *
  */
-public class JukeboxAccountCollection {
+public class JukeboxAccountCollection  implements TableModel {
 	
 	private ArrayList<JukeboxAccount> accounts;
 	private static JukeboxAccountCollection list;

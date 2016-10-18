@@ -13,15 +13,24 @@ import javax.swing.event.ListDataListener;
 
 public class SongQueue implements ListModel {
 	
-	private ArrayList<Song> queue;
+	private static ArrayList<Song> queue;
 	private int size;
+	private static SongQueue songQueue;
 	
 	/*
 	 * The SongQueue constructor.
 	 */
-	public SongQueue() {
+	private SongQueue() {
 		queue = new ArrayList<>();
 		size = 0;
+	}
+	
+	
+	public static SongQueue getInstance() {
+		if(songQueue == null)
+			songQueue = new SongQueue();
+	   	
+		return songQueue;
 	}
 
 	/*
