@@ -55,11 +55,13 @@ public class JukeboxGUI extends JFrame {
 	private static JLabel status;
 	private static TableModel model;
 	private static JTable table;
+	private static JList list;
 
 	private static JukeboxAccount currentUser;
 	private static LocalDate today;
 	private static JButton arrowButton;
 	private static JPanel wrapper;
+	private static SongQueue playlist;
 
 	private static JPanel signInBoard() {
 		JPanel signInBoard;
@@ -151,9 +153,9 @@ public class JukeboxGUI extends JFrame {
 
 		JPanel songAndAccountPanel = new JPanel();
 
-		SongQueue playList = new SongQueue();
-		JList list = new JList();
-		list.setModel(playList);
+		playlist = box.getQueue();
+		list = new JList();
+		list.setModel(playlist);
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 
@@ -163,7 +165,7 @@ public class JukeboxGUI extends JFrame {
 		songAndAccountPanel.add(JukeboxGUI.signInBoard());
 		songAndAccountPanel.setPreferredSize(new Dimension(290, 500));
 		songAndAccountPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+		
 		// songAndAccountPanel.setBorder(new EmptyBorder( 10, 20, 10, 0 ) );
 		wrapper.add(songAndAccountPanel, BorderLayout.WEST);
 
@@ -258,13 +260,15 @@ public class JukeboxGUI extends JFrame {
 							status.setText(currentUser.getName() + " logged in, " + currentUser.timesPlayed(today)
 									+ " selected, " + hoursLeft + minutesLeft + secondsLeft);
 							
-							/*
+							
 							if(!box.isPlaying()) {
 								box.addToQueue(s);
+								playlist.getElementAt(0);
+								list.getModel();
 								box.play();
 							} else
 								box.addToQueue(s);
-								*/
+								
 						}
 					}
 				}

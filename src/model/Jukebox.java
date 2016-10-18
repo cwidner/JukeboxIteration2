@@ -12,7 +12,7 @@ import songplayer.SongPlayer;
  */
 public class Jukebox {
 
-	public static String baseDir = System.getProperty("user.dir") + System.getProperty("file.separator") + "songfiles"
+	public static String baseDir = System.getProperty("user.dir") + System.getProperty("file.separator") + "src/songfiles"
 			+ System.getProperty("file.separator");
 	
 	private JukeboxAccountCollection accounts;
@@ -87,6 +87,10 @@ public class Jukebox {
 	public SongLibrary getLibrary() {
 		return songs;
 	}
+	
+	public SongQueue getQueue() {
+		return queue;
+	}
 
 	/*
 	 * Adds a song to the queue.
@@ -115,7 +119,6 @@ public class Jukebox {
 		if (!queue.isEmpty()) {
 			playing = true;
 			Song s = queue.pop();
-			System.out.println(baseDir+s.getFileName());
 			SongPlayer.playFile(new SongWaiter(), baseDir + s.getFileName());
 		}
 		return;

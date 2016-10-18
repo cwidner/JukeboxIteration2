@@ -134,5 +134,14 @@ public class Song {
 			}
 		}
 	}
+	
+	public String toString() {
+		String s = "";
+		String minutes = String.format("%1d:", length / 60);
+		String seconds = String.format("%02d", length % 60);
+		
+		s += minutes + seconds + this.songTitle + " by " + this.artistName;
+		return s;
+	}
 
 }
