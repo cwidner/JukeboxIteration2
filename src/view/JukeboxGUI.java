@@ -4,12 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.LocalDate;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowSorter;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -44,6 +53,7 @@ public class JukeboxGUI extends JFrame {
 	private static JukeboxAccount currentUser;
     private static LocalDate today;
     private static JButton arrowButton;
+    private static JPanel wrapper;
 	
  private static JPanel signInBoard(){
 	     JPanel signInBoard;
@@ -59,9 +69,10 @@ public class JukeboxGUI extends JFrame {
 
 	
 		    signInBoard=new JPanel();
-		    signInBoard.setSize(250,150);
+		  
 		    signInBoard.setLayout(new FlowLayout());
 		    view = new JPanel();
+		    view.setPreferredSize(new Dimension(280,80));
 			view.setLayout(new GridLayout(3, 3));
 			user = new JLabel("Account Name");
 			word = new JLabel("Password");
@@ -84,7 +95,7 @@ public class JukeboxGUI extends JFrame {
 //			signIn.addActionListener(new ButtonListener());
 //			signOut.addActionListener(new ButtonListener());
 	 
-	        signInBoard.setPreferredSize(new Dimension(300,200));
+	        signInBoard.setPreferredSize(new Dimension(280,200));
 			return signInBoard;
  }
  
@@ -92,9 +103,10 @@ public class JukeboxGUI extends JFrame {
 
 	public JukeboxGUI() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(400, 200);
 		this.setLocation(100, 30);
-		this.setLayout(new FlowLayout());
+	    this.setLayout(new BorderLayout(20,10));
+	    wrapper=new JPanel();
+	    wrapper.setLayout(new BorderLayout(10,10));
 		box = new Jukebox();
 		currentUser = null;
 		today = LocalDate.now();
@@ -104,7 +116,6 @@ public class JukeboxGUI extends JFrame {
 		  // set up the JFrame
 	    setTitle("Jukebox");
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setSize(1000, 500);
 	    setLocation(30, 30);
 	    
 	   
@@ -120,11 +131,25 @@ public class JukeboxGUI extends JFrame {
 	    // TODO: 4) Construct a JScrollPane to decorate table so that if the data exceeds the 
 	    // side of the table in the  GUI, then it automatically becomes scrollable.
 	    JScrollPane sc = new JScrollPane(table);
-	    sc.setPreferredSize(new Dimension(400,600));
+	    sc.setPreferredSize(new Dimension(450,465));
+	    JPanel scWrap=new JPanel();
+	    JLabel selectSong=new JLabel("Select a Song from this Jukebox");
+	   
 
-	    // TODO: 5) Add JScrollPane to this JFrame
+	    // Set the label's font size to the newly determined size.
+	    selectSong.setFont(new Font("Courier New", Font.BOLD, 20));
+	    selectSong.setForeground(Color.BLUE);
+
 	    
-	    add(sc,BorderLayout.EAST);
+	    selectSong.setSize(300, 20);
+	    scWrap.add(selectSong);
+	    scWrap.add(sc);
+	    scWrap.setLayout(new FlowLayout(FlowLayout.LEFT));
+	    scWrap.setPreferredSize(new Dimension(455,450));
+	    
+	    
+	    
+	   wrapper.add(scWrap,BorderLayout.EAST);
 	    
 	    
 	   RowSorter<TableModel> rs = new TableRowSorter<TableModel>(songCollection);
@@ -140,23 +165,46 @@ public class JukeboxGUI extends JFrame {
 	    JList list = new JList();
 	    list.setModel(playList);	    
 	    JScrollPane sc2 = new JScrollPane(list);	
-	    sc2.setPreferredSize(new Dimension(300,300));
+	   sc2.setPreferredSize(new Dimension(280,350));
+	    
+	    JLabel playlistLabel=new JLabel("Play list(song at top is playing)");
+	    songAndAccountPanel.add(playlistLabel);
 	    songAndAccountPanel.add(sc2);
 	    songAndAccountPanel.add(JukeboxGUI.signInBoard());
-	    songAndAccountPanel.setPreferredSize(new Dimension(300,600));
-	    songAndAccountPanel.setLayout(new FlowLayout());
-	    this.add(songAndAccountPanel,BorderLayout.WEST);
+	    songAndAccountPanel.setPreferredSize(new Dimension(290,500));
+	    songAndAccountPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	
+	//    songAndAccountPanel.setBorder(new EmptyBorder( 10, 20, 10, 0 ) );
+	    wrapper.add(songAndAccountPanel,BorderLayout.WEST);
 	      
-	    JButton button = new JButton("Click me!");
+	    JButton button = new JButton();
+	    button.setText("Play");
+	    button.setBorder(null);
+	    button.setPreferredSize(new Dimension(40, 40));
+	    
+//	    try {
+//	      Image img = ImageIO.read(getClass().getResource("songfiles/leftarrow.jpg"));
+//	      button.setIcon(new ImageIcon(img));
+//	    } catch (IOException ex) {
+//	    }
 	    JPanel panel = new JPanel();
-	    panel.setMaximumSize(new Dimension(30, 30));
+	    panel.setLayout(new GridBagLayout());
+	//    GridBagConstraints gbc = new GridBagConstraints();
+	//    gbc.gridwidth = GridBagConstraints.REMAINDER;
+	//   gbc.fill = GridBagConstraints.HORIZONTAL;
+	    
+	    panel.setPreferredSize(new Dimension(40, 100));
+	  
 	    panel.add(button);
-	    add(panel, BorderLayout.CENTER);
 
+	
+	    wrapper.add(panel, BorderLayout.CENTER);
+      
 	    // Listen to the button click
 //	    button.addActionListener(new ButtonListener());
-	    
-	    
+	    wrapper.setBorder(BorderFactory.createEmptyBorder(5, 36, 30, 36));
+	    this.add(wrapper);
+	    this.pack();
 	
 	}
 //
