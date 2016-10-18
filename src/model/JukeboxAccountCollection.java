@@ -10,7 +10,7 @@ import javax.swing.table.TableModel;
  * @author Colin Widner and Qiming Wan
  *
  */
-public class JukeboxAccountCollection  implements TableModel {
+public class JukeboxAccountCollection  {
 	
 	private ArrayList<JukeboxAccount> accounts;
 	private static JukeboxAccountCollection list;

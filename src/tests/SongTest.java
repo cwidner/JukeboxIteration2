@@ -1,4 +1,3 @@
-
 package tests;
 
 import static org.junit.Assert.*;
@@ -8,7 +7,6 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 import model.Song;
-import model.SongQueue;
 
 public class SongTest {
 

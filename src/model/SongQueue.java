@@ -15,23 +15,15 @@ public class SongQueue implements ListModel {
 	
 	private static ArrayList<Song> queue;
 	private int size;
-	private static SongQueue songQueue;
 	
 	/*
 	 * The SongQueue constructor.
 	 */
-	private SongQueue() {
+	public SongQueue() {
 		queue = new ArrayList<>();
 		size = 0;
 	}
 	
-	
-	public static SongQueue getInstance() {
-		if(songQueue == null)
-			songQueue = new SongQueue();
-	   	
-		return songQueue;
-	}
 
 	/*
 	 * Adds a song to the queue.

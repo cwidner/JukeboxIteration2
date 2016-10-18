@@ -34,8 +34,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 
-import controller.Jukebox;
-import controller.JukeboxAccount;
+//import controller.Jukebox;
+import model.JukeboxAccount;
 import model.SongLibrary;
 import model.SongQueue;
 
@@ -49,7 +49,7 @@ public class JukeboxGUI extends JFrame {
 		g.setVisible(true);
 	}
 
-	private static Jukebox box;
+	//private static Jukebox box;
 	private static JukeboxAccount currentUser;
     private static LocalDate today;
     private static JButton arrowButton;
