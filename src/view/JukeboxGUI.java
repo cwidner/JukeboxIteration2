@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +27,6 @@ import javax.swing.table.TableRowSorter;
 
 import controller.Jukebox;
 import controller.JukeboxAccount;
-import model.JukeboxAccountCollection;
 import model.SongLibrary;
 import model.SongQueue;
 
@@ -42,6 +43,7 @@ public class JukeboxGUI extends JFrame {
 	private static Jukebox box;
 	private static JukeboxAccount currentUser;
     private static LocalDate today;
+    private static JButton arrowButton;
 	
  private static JPanel signInBoard(){
 	     JPanel signInBoard;
@@ -53,7 +55,7 @@ public class JukeboxGUI extends JFrame {
 		 JButton signIn;
 		 JButton signOut;
 		 JLabel status;
-		 JButton arrowButton;
+		 
 
 	
 		    signInBoard=new JPanel();
@@ -79,10 +81,10 @@ public class JukeboxGUI extends JFrame {
 			signInBoard.add(view);
 			signInBoard.add(status);
 
-			signIn.addActionListener(new ButtonListener());
-			signOut.addActionListener(new ButtonListener());
+//			signIn.addActionListener(new ButtonListener());
+//			signOut.addActionListener(new ButtonListener());
 	 
-	    
+	        signInBoard.setPreferredSize(new Dimension(300,200));
 			return signInBoard;
  }
  
@@ -97,12 +99,12 @@ public class JukeboxGUI extends JFrame {
 		currentUser = null;
 		today = LocalDate.now();
 
-		ButtonListener log = new ButtonListener();
+	//	ButtonListener log = new ButtonListener();
 	    
 		  // set up the JFrame
 	    setTitle("Jukebox");
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setSize(700, 800);
+	    setSize(1000, 500);
 	    setLocation(30, 30);
 	    
 	   
@@ -112,27 +114,24 @@ public class JukeboxGUI extends JFrame {
 	    // TODO: 3) Construct the JTable (table) with our model as an argument (could use setModel)
 	    JTable table = new JTable();
 	    table.setModel(songCollection);
+	    table.setShowHorizontalLines(false);
+	    table.setShowVerticalLines(false);
 	      
 	    // TODO: 4) Construct a JScrollPane to decorate table so that if the data exceeds the 
 	    // side of the table in the  GUI, then it automatically becomes scrollable.
 	    JScrollPane sc = new JScrollPane(table);
+	    sc.setPreferredSize(new Dimension(400,600));
+
 	    // TODO: 5) Add JScrollPane to this JFrame
-	    this.add(sc);
+	    
+	    add(sc,BorderLayout.EAST);
 	    
 	    
 	   RowSorter<TableModel> rs = new TableRowSorter<TableModel>(songCollection);
 	   
 	   table.setRowSorter(rs);
 	    
-	    // TODO: Run this code to see if the JTable appears (no code to write)
-
-	    
-	    // TODO: 6) Construct a new RowSorter<TableModel> to be a TableRowSorter
-	    // while setting its model to model
-	 
-	    // TODO: 7) Link up table and the sorter
-	 
-	    // Layout the GUI
+	
 	   
 	    JPanel songAndAccountPanel = new JPanel();
 	    
@@ -140,10 +139,13 @@ public class JukeboxGUI extends JFrame {
 	    SongQueue playList = SongQueue.getInstance();	 
 	    JList list = new JList();
 	    list.setModel(playList);	    
-	    JScrollPane sc2 = new JScrollPane(list);	 
+	    JScrollPane sc2 = new JScrollPane(list);	
+	    sc2.setPreferredSize(new Dimension(300,300));
 	    songAndAccountPanel.add(sc2);
 	    songAndAccountPanel.add(JukeboxGUI.signInBoard());
-	    this.add(sc2,BorderLayout.WEST);
+	    songAndAccountPanel.setPreferredSize(new Dimension(300,600));
+	    songAndAccountPanel.setLayout(new FlowLayout());
+	    this.add(songAndAccountPanel,BorderLayout.WEST);
 	      
 	    JButton button = new JButton("Click me!");
 	    JPanel panel = new JPanel();
@@ -152,7 +154,7 @@ public class JukeboxGUI extends JFrame {
 	    add(panel, BorderLayout.CENTER);
 
 	    // Listen to the button click
-	    button.addActionListener(new ButtonListener());
+//	    button.addActionListener(new ButtonListener());
 	    
 	    
 	
