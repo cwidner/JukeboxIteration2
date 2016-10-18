@@ -107,6 +107,7 @@ public class JukeboxGUI extends JFrame {
 		return signInBoard;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JukeboxGUI() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(100, 30);
@@ -154,8 +155,7 @@ public class JukeboxGUI extends JFrame {
 		JPanel songAndAccountPanel = new JPanel();
 
 		playlist = box.getQueue();
-		list = new JList();
-		list.setModel(playlist);
+		list = new JList(playlist);
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 
@@ -165,13 +165,11 @@ public class JukeboxGUI extends JFrame {
 		songAndAccountPanel.add(JukeboxGUI.signInBoard());
 		songAndAccountPanel.setPreferredSize(new Dimension(290, 500));
 		songAndAccountPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		// songAndAccountPanel.setBorder(new EmptyBorder( 10, 20, 10, 0 ) );
+
 		wrapper.add(songAndAccountPanel, BorderLayout.WEST);
 
 		JButton button = new JButton();
 		button.setText("<-");
-		// button.setBorder(null);
 		button.setPreferredSize(new Dimension(40, 40));
 
 		/*
@@ -181,9 +179,6 @@ public class JukeboxGUI extends JFrame {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		// GridBagConstraints gbc = new GridBagConstraints();
-		// gbc.gridwidth = GridBagConstraints.REMAINDER;
-		// gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		panel.setPreferredSize(new Dimension(40, 100));
 
@@ -191,7 +186,6 @@ public class JukeboxGUI extends JFrame {
 
 		wrapper.add(panel, BorderLayout.CENTER);
 
-		// Listen to the button click
 		button.addActionListener(new ButtonListener());
 		wrapper.setBorder(BorderFactory.createEmptyBorder(5, 36, 30, 36));
 		this.add(wrapper);
@@ -246,29 +240,27 @@ public class JukeboxGUI extends JFrame {
 						JOptionPane.showMessageDialog(null, "User daily play limit reached");
 					else {
 						int selectedRow = table.convertRowIndexToModel(table.getSelectedRow());
-						Song s = box.getSong((String)model.getValueAt(selectedRow, 1));
-						if(!s.canPlay(today)) {
+						Song s = box.getSong((String) model.getValueAt(selectedRow, 1));
+						if (!s.canPlay(today)) {
 							JOptionPane.showMessageDialog(null, "Song daily play limit reached");
 						} else {
 							currentUser.play(today);
 							s.play(today);
 							currentUser.withdraw(s.getSongLength());
-							
+
 							String hoursLeft = String.format("%02d:", (currentUser.getCredit() / 60) / 60);
 							String minutesLeft = String.format("%02d:", (currentUser.getCredit() / 60) % 60);
 							String secondsLeft = String.format("%02d", currentUser.getCredit() % 60);
 							status.setText(currentUser.getName() + " logged in, " + currentUser.timesPlayed(today)
 									+ " selected, " + hoursLeft + minutesLeft + secondsLeft);
-							
-							
-							if(!box.isPlaying()) {
+
+							if (!box.isPlaying()) {
 								box.addToQueue(s);
-								playlist.getElementAt(0);
-								list.getModel();
 								box.play();
-							} else
+							} else {
 								box.addToQueue(s);
-								
+							}
+
 						}
 					}
 				}

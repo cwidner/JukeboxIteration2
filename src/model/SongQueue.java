@@ -12,10 +12,10 @@ import javax.swing.event.ListDataListener;
  */
 
 public class SongQueue implements ListModel {
-	
+
 	private static ArrayList<Song> queue;
 	private int size;
-	
+
 	/*
 	 * The SongQueue constructor.
 	 */
@@ -23,19 +23,17 @@ public class SongQueue implements ListModel {
 		queue = new ArrayList<>();
 		size = 0;
 	}
-	
 
 	/*
 	 * Adds a song to the queue.
 	 * 
-	 * Parameters:
-	 * 	s - The song to be added to the queue.
+	 * Parameters: s - The song to be added to the queue.
 	 */
 	public void addSong(Song s) {
 		queue.add(s);
 		size++;
 	}
-	
+
 	/*
 	 * Determines if the queue is empty.
 	 * 
@@ -44,7 +42,7 @@ public class SongQueue implements ListModel {
 	public boolean isEmpty() {
 		return size == 0;
 	}
-	
+
 	/*
 	 * Removes the Song from the front of the queue.
 	 * 
@@ -54,7 +52,7 @@ public class SongQueue implements ListModel {
 		size--;
 		return queue.remove(0);
 	}
-	
+
 	/*
 	 * Returns the size of the queue.
 	 * 
@@ -64,10 +62,6 @@ public class SongQueue implements ListModel {
 		return size;
 	}
 
-	/**
-	 * NEED TO IMPLEMENT THESE METHODS BELOW.
-	 */
-	
 	@Override
 	public Object getElementAt(int index) {
 		return queue.get(index);
@@ -76,14 +70,13 @@ public class SongQueue implements ListModel {
 	@Override
 	public void addListDataListener(ListDataListener l) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void removeListDataListener(ListDataListener l) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }
