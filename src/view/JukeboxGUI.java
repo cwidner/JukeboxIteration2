@@ -5,20 +5,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,50 +28,123 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.RowSorter;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import model.Jukebox;
-//import controller.Jukebox;
 import model.JukeboxAccount;
-import model.JukeboxAccountCollection;
 import model.Song;
-import model.SongLibrary;
 import model.SongQueue;
 
 public class JukeboxGUI extends JFrame {
-
+	
 	public static void main(String[] args) {
 		JukeboxGUI g = new JukeboxGUI();
 		g.setVisible(true);
 	}
 
-	private static Jukebox box;
 	private static JTextField userInput;
 	private static JPasswordField passInput;
 	private static JLabel status;
 	private static TableModel model;
 	private static JTable table;
 	private static JList<SongQueue> list;
-
-	private static JukeboxAccount currentUser;
-	private static LocalDate today;
 	private static JButton arrowButton;
 	private static JPanel wrapper;
-	private static SongQueue playlist;
 
+	private static Jukebox box;
+	private static JukeboxAccount currentUser;
+	private static LocalDate today;
+	private static ListModel<SongQueue> playlist;
+
+	public JukeboxGUI() {
+		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocation(100, 30);
+		this.setLayout(new BorderLayout(20, 10));
+		wrapper = new JPanel();
+		wrapper.setLayout(new BorderLayout(10, 10));
+		
+		loadDataWithOptionPane();
+
+		setTitle("Jukebox");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocation(30, 30);
+
+		wrapper.add(JukeboxGUI.songLibraryTable(), BorderLayout.EAST);
+		RowSorter<TableModel> rs = new TableRowSorter<TableModel>(model);
+		table.setRowSorter(rs);
+		wrapper.add(JukeboxGUI.songAndAccountPanel(), BorderLayout.WEST);
+		arrowButton = new JButton();
+		arrowButton.setText("<-");
+		arrowButton.setPreferredSize(new Dimension(40, 40));
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(40, 100));
+		panel.add(arrowButton);
+		wrapper.add(panel, BorderLayout.CENTER);
+		arrowButton.addActionListener(new ButtonListener());
+		wrapper.setBorder(BorderFactory.createEmptyBorder(5, 36, 30, 36));
+		this.add(wrapper);
+		this.pack();
+		
+		CloseListener close = new CloseListener();
+		this.addWindowListener(close);
+
+	}
+
+	private void loadDataWithOptionPane() {
+		int choice = JOptionPane.showConfirmDialog(null, "Start with previous saved state?\nNo means all new objects.");
+		
+		if(choice == 0) {
+			startWithPersistentVersion();
+		} else {
+			box = new Jukebox();
+			currentUser = null;
+		}
+		
+	}
+
+	private void startWithPersistentVersion() {
+		try {
+			ObjectInputStream inFile = new ObjectInputStream(new FileInputStream("Objects.ser"));
+			box = (Jukebox)inFile.readObject();
+			currentUser = (JukeboxAccount)inFile.readObject();
+		} catch (Exception e) {
+			System.out.println("Something went wrong");
+		}
+		
+	}
+	
+	private void saveDataWithOptionPane() {
+		int choice = JOptionPane.showConfirmDialog(null, "Save data?");
+		
+		if(choice == 0) {
+			savePersistence();
+		}
+		
+	}
+
+	private void savePersistence() {
+		try {
+			ObjectOutputStream outFile = new ObjectOutputStream(new FileOutputStream("Objects.ser"));
+			outFile.writeObject(box);
+			outFile.writeObject(currentUser);
+		} catch (Exception e) {
+			System.out.println("Something went wrong");
+		}
+	}
+	
 	private static JPanel signInBoard() {
 		JPanel signInBoard;
 		JPanel view;
 		JLabel user;
 		JLabel word;
-		// JTextField userInput;
-		// JPasswordField passInput;
 		JButton signIn;
 		JButton signOut;
-		// JLabel status;
 
 		signInBoard = new JPanel();
 
@@ -106,29 +178,9 @@ public class JukeboxGUI extends JFrame {
 		signInBoard.setPreferredSize(new Dimension(280, 200));
 		return signInBoard;
 	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JukeboxGUI() {
-		
-		
-		
-		
-		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setLocation(100, 30);
-		this.setLayout(new BorderLayout(20, 10));
-		wrapper = new JPanel();
-		wrapper.setLayout(new BorderLayout(10, 10));
-		box = new Jukebox();
-		currentUser = null;
-		today = LocalDate.now();
-
-		setTitle("Jukebox");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocation(30, 30);
-
+	
+	private static JPanel songLibraryTable() {
 		model = box.getLibrary();
-
 		table = new JTable(model);
 		table.setShowHorizontalLines(false);
 		table.setShowVerticalLines(false);
@@ -147,13 +199,12 @@ public class JukeboxGUI extends JFrame {
 		scWrap.add(sc);
 		scWrap.setLayout(new FlowLayout(FlowLayout.LEFT));
 		scWrap.setPreferredSize(new Dimension(455, 450));
-
-		wrapper.add(scWrap, BorderLayout.EAST);
-
-		RowSorter<TableModel> rs = new TableRowSorter<TableModel>(model);
-
-		table.setRowSorter(rs);
-
+		
+		return scWrap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static JPanel songAndAccountPanel() {
 		JPanel songAndAccountPanel = new JPanel();
 
 		playlist = box.getQueue();
@@ -167,34 +218,10 @@ public class JukeboxGUI extends JFrame {
 		songAndAccountPanel.add(JukeboxGUI.signInBoard());
 		songAndAccountPanel.setPreferredSize(new Dimension(290, 500));
 		songAndAccountPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		wrapper.add(songAndAccountPanel, BorderLayout.WEST);
-
-		JButton button = new JButton();
-		button.setText("<-");
-		button.setPreferredSize(new Dimension(40, 40));
-
-		/*
-		 * try { Image img = ImageIO.read(new File("songfiles/leftarrow.jpg"));
-		 * button.setIcon(new ImageIcon(img)); } catch (IOException ex) { }
-		 */
-
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-
-		panel.setPreferredSize(new Dimension(40, 100));
-
-		panel.add(button);
-
-		wrapper.add(panel, BorderLayout.CENTER);
-
-		button.addActionListener(new ButtonListener());
-		wrapper.setBorder(BorderFactory.createEmptyBorder(5, 36, 30, 36));
-		this.add(wrapper);
-		this.pack();
-
+		
+		return songAndAccountPanel;
 	}
-
+	
 	private static class ButtonListener implements ActionListener {
 
 		@Override
@@ -258,9 +285,11 @@ public class JukeboxGUI extends JFrame {
 
 							if (!box.isPlaying()) {
 								box.addToQueue(s);
+								list.setModel(playlist);
 								box.play();
 							} else {
 								box.addToQueue(s);
+								list.setModel(playlist);
 							}
 
 						}
@@ -270,5 +299,37 @@ public class JukeboxGUI extends JFrame {
 
 		}
 
+	}
+	
+	private class CloseListener implements WindowListener {
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			saveDataWithOptionPane();
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}	
 	}
 }
