@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @author Colin Widner and Qiming Wan
  *
  */
-public class Song {
+public class Song implements Serializable{
 	
 	private String fileName;
 	private String artistName;

@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -10,7 +12,7 @@ import songplayer.SongPlayer;
  * @author Colin Widner and Qiming Wan
  *
  */
-public class Jukebox {
+public class Jukebox implements Serializable {
 
 	public static String baseDir = System.getProperty("user.dir") + System.getProperty("file.separator") + "src/songfiles"
 			+ System.getProperty("file.separator");

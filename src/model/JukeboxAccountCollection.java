@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.table.TableModel;
@@ -10,7 +11,7 @@ import javax.swing.table.TableModel;
  * @author Colin Widner and Qiming Wan
  *
  */
-public class JukeboxAccountCollection  {
+public class JukeboxAccountCollection implements Serializable {
 	
 	private ArrayList<JukeboxAccount> accounts;
 	private static JukeboxAccountCollection list;

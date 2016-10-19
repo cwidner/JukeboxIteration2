@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
@@ -11,7 +12,7 @@ import javax.swing.event.ListDataListener;
  *
  */
 
-public class SongQueue implements ListModel {
+public class SongQueue implements ListModel, Serializable {
 
 	private static ArrayList<Song> queue;
 	private int size;

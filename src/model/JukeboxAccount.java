@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  *         student has played on the current day.
  *
  */
-public class JukeboxAccount {
+public class JukeboxAccount implements Serializable{
 
 	private String name;
 	private String password;

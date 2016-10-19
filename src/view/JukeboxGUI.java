@@ -55,7 +55,7 @@ public class JukeboxGUI extends JFrame {
 	private static JLabel status;
 	private static TableModel model;
 	private static JTable table;
-	private static JList list;
+	private static JList<SongQueue> list;
 
 	private static JukeboxAccount currentUser;
 	private static LocalDate today;
@@ -109,6 +109,11 @@ public class JukeboxGUI extends JFrame {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JukeboxGUI() {
+		
+		
+		
+		
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(100, 30);
 		this.setLayout(new BorderLayout(20, 10));
@@ -118,9 +123,6 @@ public class JukeboxGUI extends JFrame {
 		currentUser = null;
 		today = LocalDate.now();
 
-		// ButtonListener log = new ButtonListener();
-
-		// set up the JFrame
 		setTitle("Jukebox");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocation(30, 30);
@@ -155,7 +157,7 @@ public class JukeboxGUI extends JFrame {
 		JPanel songAndAccountPanel = new JPanel();
 
 		playlist = box.getQueue();
-		list = new JList(playlist);
+		list = new JList<SongQueue>(playlist);
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -11,7 +12,7 @@ import javax.swing.table.TableModel;
  * @author Colin Widner and Qiming Wan
  *
  */
-public class SongLibrary implements TableModel {
+public class SongLibrary implements TableModel, Serializable {
 	
 	private ArrayList<Song> songs;
 	private static SongLibrary library;
