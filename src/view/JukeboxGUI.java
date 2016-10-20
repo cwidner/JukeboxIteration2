@@ -50,14 +50,14 @@ public class JukeboxGUI extends JFrame {
 	private static JLabel status;
 	private static TableModel model;
 	private static JTable table;
-	private static JList<SongQueue> list;
+	private static JList<Song> list;
 	private static JButton arrowButton;
 	private static JPanel wrapper;
 
 	private static Jukebox box;
 	private static JukeboxAccount currentUser;
 	private static LocalDate today;
-	private static ListModel<SongQueue> playlist;
+	private static SongQueue playlist;
 
 	public JukeboxGUI() {
 		
@@ -208,7 +208,7 @@ public class JukeboxGUI extends JFrame {
 		JPanel songAndAccountPanel = new JPanel();
 
 		playlist = box.getQueue();
-		list = new JList<SongQueue>(playlist);
+		list = new JList<Song>(playlist);
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 

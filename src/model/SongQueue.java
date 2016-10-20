@@ -12,7 +12,7 @@ import javax.swing.event.ListDataListener;
  *
  */
 
-public class SongQueue implements ListModel, Serializable {
+public class SongQueue implements ListModel<Song>, Serializable {
 
 	private static ArrayList<Song> queue;
 	private int size;
@@ -64,7 +64,7 @@ public class SongQueue implements ListModel, Serializable {
 	}
 
 	@Override
-	public Object getElementAt(int index) {
+	public Song getElementAt(int index) {
 		return queue.get(index);
 	}
 
