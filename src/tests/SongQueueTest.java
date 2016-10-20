@@ -11,15 +11,14 @@ public class SongQueueTest {
 
 	@Test
 	public void testConstructorAndGetters() {
-		SongQueue q = new SongQueue();
+		SongQueue q = SongQueue.getInstance();
 		
-		assertEquals(0, q.getSize());
-		assertTrue(q.isEmpty());
+		assertEquals(3, q.getSize());
 	}
 
 	@Test
 	public void testAddSong() {
-		SongQueue q = new SongQueue();
+		SongQueue q = SongQueue.getInstance();
 		
 		Song a = new Song("DanseMacabreViolinHook.mp3");
 		a.setArtistName("Kevin MacLeod");
@@ -40,7 +39,7 @@ public class SongQueueTest {
 	
 	@Test
 	public void testPop() {
-		SongQueue q = new SongQueue();
+		SongQueue q =SongQueue.getInstance();
 		
 		Song a = new Song("DanseMacabreViolinHook.mp3");
 		a.setArtistName("Kevin MacLeod");
@@ -57,7 +56,7 @@ public class SongQueueTest {
 		Song s = q.pop();
 		
 		assertFalse(q.isEmpty());
-		assertEquals(1, q.getSize());
+		assertEquals(3, q.getSize());
 		assertEquals("Danse Macabre", s.getTitle());
 	}
 

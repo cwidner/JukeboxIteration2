@@ -82,6 +82,11 @@ public class SongLibrary implements TableModel, Serializable {
 		addSong(i);
 	}
 	
+	public Song getSongFromIndex(int i){
+		return songs.get(i);
+		
+		
+	}
 	public static SongLibrary getInstance() {
 		if(library == null)
 			library = new SongLibrary();

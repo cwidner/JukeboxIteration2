@@ -12,7 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
@@ -40,7 +42,7 @@ import model.SongQueue;
 
 public class JukeboxGUI extends JFrame {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		JukeboxGUI g = new JukeboxGUI();
 		g.setVisible(true);
 	}
@@ -59,8 +61,8 @@ public class JukeboxGUI extends JFrame {
 	private static LocalDate today;
 	private static SongQueue playlist;
 
-	public JukeboxGUI() {
-		
+	public JukeboxGUI() throws FileNotFoundException, ClassNotFoundException, IOException {
+		currentUser=null;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(100, 30);
 		this.setLayout(new BorderLayout(20, 10));
@@ -96,9 +98,9 @@ public class JukeboxGUI extends JFrame {
 
 	}
 
-	private void loadDataWithOptionPane() {
+	private void loadDataWithOptionPane() throws FileNotFoundException, ClassNotFoundException, IOException {
 		int choice = JOptionPane.showConfirmDialog(null, "Start with previous saved state?\nNo means all new objects.");
-		
+	//	int choice =0;
 		if(choice == 0) {
 			startWithPersistentVersion();
 		} else {
@@ -108,14 +110,14 @@ public class JukeboxGUI extends JFrame {
 		
 	}
 
-	private void startWithPersistentVersion() {
-		try {
+	private void startWithPersistentVersion() throws FileNotFoundException, IOException, ClassNotFoundException {
+		
 			ObjectInputStream inFile = new ObjectInputStream(new FileInputStream("Objects.ser"));
 			box = (Jukebox)inFile.readObject();
-			currentUser = (JukeboxAccount)inFile.readObject();
-		} catch (Exception e) {
-			System.out.println("Something went wrong");
-		}
+		//	currentUser = (JukeboxAccount)inFile.readObject(); //because we don't need to store account
+			inFile.close();
+
+		
 		
 	}
 	
@@ -123,6 +125,12 @@ public class JukeboxGUI extends JFrame {
 		int choice = JOptionPane.showConfirmDialog(null, "Save data?");
 		
 		if(choice == 0) {
+			currentUser = null;
+			status.setText("Status: Sign in to play music");
+			userInput.setText("");
+			passInput.setText("");
+			box.setPlaying(false);  // isPlaying = false;
+
 			savePersistence();
 		}
 		
@@ -132,7 +140,8 @@ public class JukeboxGUI extends JFrame {
 		try {
 			ObjectOutputStream outFile = new ObjectOutputStream(new FileOutputStream("Objects.ser"));
 			outFile.writeObject(box);
-			outFile.writeObject(currentUser);
+		//	outFile.writeObject(currentUser);      //don't save user
+			outFile.close();
 		} catch (Exception e) {
 			System.out.println("Something went wrong");
 		}
@@ -203,12 +212,13 @@ public class JukeboxGUI extends JFrame {
 		return scWrap;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private static JPanel songAndAccountPanel() {
 		JPanel songAndAccountPanel = new JPanel();
 
 		playlist = box.getQueue();
-		list = new JList<Song>(playlist);
+		list = new JList<Song>();
+		list.setModel(playlist);
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 
@@ -263,6 +273,8 @@ public class JukeboxGUI extends JFrame {
 			else if (text.equals("<-")) {
 				if (currentUser == null)
 					JOptionPane.showMessageDialog(null, "Sign in to play music");
+				if (table.getSelectedRow()==-1)
+					JOptionPane.showMessageDialog(null, "Select to play music");
 				else {
 					today = LocalDate.now();
 					if (!currentUser.canPlay(today))

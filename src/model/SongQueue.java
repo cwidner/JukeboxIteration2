@@ -16,13 +16,17 @@ public class SongQueue implements ListModel<Song>, Serializable {
 
 	private static ArrayList<Song> queue;
 	private int size;
+	private static SongQueue songQueue;
 
 	/*
 	 * The SongQueue constructor.
 	 */
-	public SongQueue() {
+	private SongQueue() {
 		queue = new ArrayList<>();
 		size = 0;
+		
+		
+		
 	}
 
 	/*
@@ -78,6 +82,13 @@ public class SongQueue implements ListModel<Song>, Serializable {
 	public void removeListDataListener(ListDataListener l) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static SongQueue getInstance() {
+		if(songQueue == null)
+			songQueue = new SongQueue();
+		
+		return songQueue;
 	}
 
 }

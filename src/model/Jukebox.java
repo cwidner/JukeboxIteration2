@@ -28,7 +28,7 @@ public class Jukebox implements Serializable {
 	public Jukebox() {
 		this.accounts = JukeboxAccountCollection.getInstance();
 		this.songs = SongLibrary.getInstance();
-		this.queue = new SongQueue();
+		this.queue = SongQueue.getInstance();
 		this.playing = false;
 	}
 
@@ -113,6 +113,10 @@ public class Jukebox implements Serializable {
 		return this.playing;
 	}
 	
+	public void setPlaying(boolean status){
+		playing=status;
+		return;
+	}
 	/*
 	 * Plays the song at the beginning of the queue.
 	 */
@@ -120,7 +124,7 @@ public class Jukebox implements Serializable {
 		
 		if (!queue.isEmpty()) {
 			playing = true;
-			Song s = queue.pop();
+            Song s = queue.getElementAt(0);
 			SongPlayer.playFile(new SongWaiter(), baseDir + s.getFileName());
 		}
 		return;
@@ -136,7 +140,7 @@ public class Jukebox implements Serializable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+			queue.pop();
 			playing = false;
 			play();
 		}
