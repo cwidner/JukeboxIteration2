@@ -120,21 +120,17 @@ public class Jukebox implements Serializable {
 	/*
 	 * Plays the song at the beginning of the queue.
 	 */
-	public void play() {
-		
+	public void play() {		
 		if (!queue.isEmpty()) {
 			playing = true;
             Song s = queue.getElementAt(0);
 			SongPlayer.playFile(new SongWaiter(), baseDir + s.getFileName());
 		}
 		return;
-	}
-	
+	}	
 	private class SongWaiter implements EndOfSongListener {
-
 		@Override
-		public void songFinishedPlaying(EndOfSongEvent eventWithFileNameAndDateFinished) {
-			
+		public void songFinishedPlaying(EndOfSongEvent eventWithFileNameAndDateFinished) {		
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

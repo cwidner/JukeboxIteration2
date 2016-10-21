@@ -30,7 +30,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.RowSorter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -219,6 +218,7 @@ public class JukeboxGUI extends JFrame {
 		playlist = box.getQueue();
 		list = new JList<Song>();
 		list.setModel(playlist);
+		list.updateUI();
 		JScrollPane sc2 = new JScrollPane(list);
 		sc2.setPreferredSize(new Dimension(280, 350));
 
@@ -298,10 +298,12 @@ public class JukeboxGUI extends JFrame {
 							if (!box.isPlaying()) {
 								box.addToQueue(s);
 								list.setModel(playlist);
+								list.updateUI();
 								box.play();
 							} else {
 								box.addToQueue(s);
 								list.setModel(playlist);
+								list.updateUI();
 							}
 
 						}
