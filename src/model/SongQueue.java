@@ -14,19 +14,21 @@ import javax.swing.event.ListDataListener;
 
 public class SongQueue implements ListModel<Song>, Serializable {
 
-	private static ArrayList<Song> queue;
-	private int size;
+	private ArrayList<Song> queue;
 	private static SongQueue songQueue;
 
 	/*
 	 * The SongQueue constructor.
 	 */
+	public static SongQueue getInstance() {
+		if(songQueue == null)
+			songQueue = new SongQueue();
+		
+		return songQueue;
+	}
+	
 	private SongQueue() {
-		queue = new ArrayList<>();
-		size = 0;
-		
-		
-		
+		queue = new ArrayList<>();	
 	}
 
 	/*
@@ -36,7 +38,6 @@ public class SongQueue implements ListModel<Song>, Serializable {
 	 */
 	public void addSong(Song s) {
 		queue.add(s);
-		size++;
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class SongQueue implements ListModel<Song>, Serializable {
 	 * Returns: True if the size of the queue is zero, false otherwise.
 	 */
 	public boolean isEmpty() {
-		return size == 0;
+		return (queue.size() == 0);
 	}
 
 	/*
@@ -54,7 +55,6 @@ public class SongQueue implements ListModel<Song>, Serializable {
 	 * Returns: The Song object that was removed from the queue.
 	 */
 	public Song pop() {
-		size--;
 		return queue.remove(0);
 	}
 
@@ -64,7 +64,7 @@ public class SongQueue implements ListModel<Song>, Serializable {
 	 * Returns: An integer that is the amount of songs in the queue.
 	 */
 	public int getSize() {
-		return size;
+		return queue.size();
 	}
 
 	@Override
@@ -84,11 +84,6 @@ public class SongQueue implements ListModel<Song>, Serializable {
 
 	}
 
-	public static SongQueue getInstance() {
-		if(songQueue == null)
-			songQueue = new SongQueue();
-		
-		return songQueue;
-	}
+
 
 }

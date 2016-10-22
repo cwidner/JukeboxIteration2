@@ -20,6 +20,7 @@ public class JukeboxAccount implements Serializable{
 	private String password;
 	private int credit;
 	private ArrayList<LocalDate> timesPlayed;
+	private int maxPlayTimes=3;
 
 	/*
 	 * The JukeboxAccount constructor
@@ -97,7 +98,7 @@ public class JukeboxAccount implements Serializable{
 	 */
 	public boolean canPlay(LocalDate d) {
 
-		if (timesPlayed.size() < 3)
+		if (timesPlayed.size() < maxPlayTimes)
 			return true;
 
 		for (int i = 0; i < timesPlayed.size(); i++) {
@@ -115,7 +116,7 @@ public class JukeboxAccount implements Serializable{
 	 * played a song.
 	 */
 	public void play(LocalDate d) {
-		if (timesPlayed.size() < 3) {
+		if (timesPlayed.size() < maxPlayTimes) {
 			timesPlayed.add(d);
 			return;
 		}

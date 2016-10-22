@@ -5,6 +5,7 @@ import java.io.Serializable;
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
+import view.JukeboxGUI;
 
 /**
  * This class coordinates all activities for the Jukebox.
@@ -31,7 +32,18 @@ public class Jukebox implements Serializable {
 		this.queue = SongQueue.getInstance();
 		this.playing = false;
 	}
-
+   public void setSongLibrary(SongLibrary library){
+	   songs=library;
+	   return;
+   }
+   public void setAccounts(JukeboxAccountCollection accounts){
+	   
+	   this.accounts=accounts;
+	   return;
+   }
+   public JukeboxAccountCollection returnAccounts(){
+	   return accounts;
+   }
 	/*
 	 * Determines if the username is paired to a JukeboxAccount in the collection.
 	 * 
@@ -117,11 +129,14 @@ public class Jukebox implements Serializable {
 		playing=status;
 		return;
 	}
+	public void setSongQueue(SongQueue queue){
+		this.queue=queue;
+	}
 	/*
 	 * Plays the song at the beginning of the queue.
 	 */
 	public void play() {		
-		if (!queue.isEmpty()) {
+		if (!queue.isEmpty() && playing==false) {
 			playing = true;
             Song s = queue.getElementAt(0);
 			SongPlayer.playFile(new SongWaiter(), baseDir + s.getFileName());
@@ -137,6 +152,7 @@ public class Jukebox implements Serializable {
 				e.printStackTrace();
 			}
 			queue.pop();
+			JukeboxGUI.updatePlaylist();
 			playing = false;
 			play();
 		}
